@@ -1,0 +1,77 @@
+//Davor Georgievski INKI850 Proekt br. 50
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+// definiranje f-ja za naogjanje na najgolemata cifra od brojot na indeksot
+int najgolemaCifra(int indeks)
+{
+    int arr[3];
+    int najgolem=0;
+
+    arr[0] = indeks / 100;
+    arr[1] = indeks % 100; arr[1] = arr[1] / 10;
+    arr[2] = indeks % 10;
+
+    for (unsigned int i=0; i<4; i++)
+        {
+            if (arr[i]>najgolem) najgolem=arr[i];
+        }
+    return najgolem;
+}
+int main()
+{
+    int indeks,broj;
+    const string sodrzina = "INKI850Davor Whitesnake Every day I want to try To kiss the tears from your eye I broke your heart a thousand times I'm guilty of a thousand crimes I know you've heard it all before But I won't hurt you any more";
+    vector<int> encrypted;
+    string imeNaDatoteka;
+    ofstream datoteka;
+
+    cout<<"Vasiot indeks e: INKI";
+    cin>>indeks;
+    imeNaDatoteka = "INKI" + to_string(indeks) + ".Proekt3.txt";
+    broj = najgolemaCifra(indeks);
+
+    // vektorot se polni so ascii kod pomesten za odreden broj mesta od originalniot string sodrzina
+
+    for (unsigned int i=0; i<sodrzina.size(); i++)
+        {
+        encrypted.push_back((int) sodrzina.at(i) + broj);
+        }
+
+    // se sortira vektorot od najmal do najgolem broj
+
+    sort(encrypted.begin(), encrypted.end());
+
+    // se pecati vektorot
+
+    for (unsigned int i=0; i<encrypted.size(); i++)
+        {
+        cout<<encrypted[i]<<" ";
+        }
+
+    // otvaranje na dadoteka
+
+    datoteka.open(string(imeNaDatoteka).c_str());
+
+    // pisuvanje vo dadotekata
+
+    for (unsigned int i=0; i<encrypted.size(); i++)
+    {
+            datoteka << encrypted[i]<<" ";
+            // se dodavaat prazni linii za da ne bidi vo eden red celata sodrzina
+            if (i % 15 == 0 && i != 0)
+                {
+                datoteka << endl;
+                }
+    }
+
+    // zatvoranje na dadotekata
+    datoteka.close();
+
+    return 0;
+}
